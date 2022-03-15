@@ -21,6 +21,8 @@ pip install -r requirements.txt
 
 ### Run project
 
+Create config/config.ini file based on config.template.ini file with your parameters.
+
 ```bash
 python tests/test_voicemod.py
 ```
@@ -39,3 +41,4 @@ python tests/test_voicemod.py
 export sonarToken="your-token"
 ./scripts/run-sonar-scanner.sh
 ```
+![sonar](img/sonar.png "SonarQube")

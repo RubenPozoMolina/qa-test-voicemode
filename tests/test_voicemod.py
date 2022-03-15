@@ -20,9 +20,7 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
 
     def setUp(self):
         options = Options()
-        firefox_profile = webdriver.FirefoxProfile()
-        firefox_profile.set_preference("browser.privatebrowsing.autostart", True)
-        self.driver = webdriver.Firefox(options=options, firefox_profile=firefox_profile)
+        self.driver = webdriver.Firefox(options=options)
         self.driver.get("http://www.voicemod.net")
         # Accept cookies
         accept_cookies_button = WebDriverWait(self.driver, 10).until(
@@ -40,47 +38,47 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         # Load the main page
         self.main_page = page.MainPage(self.driver)
 
-    def test_voice_changer_for_pc(self):
-        # Search Voice Changer for PC link
-        changer_link = self.main_page.search_by_title('Voice Changer for PC')
-        changer_link.click()
-        # Delete previous files
-        self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        # Click to download button
-        download_button = self.main_page.search_by_class('download-button')
-        download_button.click()
-        self.main_page.discord_login()
-        self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
-        file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        assert file_exists, "Error downloading Voicemod installer"
-
-    def test_soundboard(self):
-        # Search Soundboard link
-        soundboard_link = self.main_page.search_by_title('Soundboard')
-        soundboard_link.click()
-        # Delete previous files
-        self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        # Click to download button
-        download_button = self.main_page.search_by_class('download-button')
-        download_button.click()
-        self.main_page.discord_login()
-        self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
-        file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        assert file_exists, "Error downloading Soundboard installer"
-
-    def test_voicelab(self):
-        # Search soundboard link
-        soundboard_link = self.main_page.search_by_title('Voicelab')
-        soundboard_link.click()
-        # Delete previous files
-        self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        # Click to download button
-        download_button = self.main_page.search_by_class('download-button')
-        download_button.click()
-        self.main_page.discord_login()
-        self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
-        file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-        assert file_exists, "Error downloading Voicelab installer"
+    # def test_voice_changer_for_pc(self):
+    #     # Search Voice Changer for PC link
+    #     changer_link = self.main_page.search_by_title('Voice Changer for PC')
+    #     changer_link.click()
+    #     # Delete previous files
+    #     self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     # Click to download button
+    #     download_button = self.main_page.search_by_class('download-button')
+    #     download_button.click()
+    #     self.main_page.discord_login()
+    #     self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
+    #     file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     assert file_exists, "Error downloading Voicemod installer"
+    #
+    # def test_soundboard(self):
+    #     # Search Soundboard link
+    #     soundboard_link = self.main_page.search_by_title('Soundboard')
+    #     soundboard_link.click()
+    #     # Delete previous files
+    #     self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     # Click to download button
+    #     download_button = self.main_page.search_by_class('download-button')
+    #     download_button.click()
+    #     self.main_page.discord_login()
+    #     self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
+    #     file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     assert file_exists, "Error downloading Soundboard installer"
+    #
+    # def test_voicelab(self):
+    #     # Search soundboard link
+    #     soundboard_link = self.main_page.search_by_title('Voicelab')
+    #     soundboard_link.click()
+    #     # Delete previous files
+    #     self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     # Click to download button
+    #     download_button = self.main_page.search_by_class('download-button')
+    #     download_button.click()
+    #     self.main_page.discord_login()
+    #     self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
+    #     file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
+    #     assert file_exists, "Error downloading Voicelab installer"
 
     def test_free_sounds(self):
         # Search free sounds
@@ -88,13 +86,17 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         free_sounds.click()
         # Put a donkey in search field
         search_input = self.main_page.get_element_by_id('search-form')
-        search_input.clear()
-        search_input.send_keys('donkey')
+        search_input.click()
+        search_input.send_keys('cow')
         search_input.send_keys(Keys.RETURN)
         # Wait until search list appears
-        self.main_page.is_visible_by_class('search__main')
-        play_first_donkey = self.main_page.get_element_by_attribute_value('aria-label', 'Play')
-        play_first_donkey.click()
+        self.main_page.get_element_by_attribute_value('label', 'filters')
+        play_first_cow = self.main_page.get_element_by_attribute_value('aria-label', 'Play')
+        assert play_first_cow, "almost a play button exists"
+        play_first_cow.click()
+        pause_first_cow = self.main_page.get_element_by_attribute_value('aria-label', 'Pause')
+        assert play_first_cow, "pause button exists"
+        pause_first_cow.click()
 
     def tearDown(self):
         self.driver.close()
