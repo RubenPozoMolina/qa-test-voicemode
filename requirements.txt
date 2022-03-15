@@ -1,0 +1,5 @@
+selenium
+pylint
+coverage
+configparser
+waiting
