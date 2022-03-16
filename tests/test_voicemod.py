@@ -110,6 +110,18 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         equal_files = self.file_utils.are_file_equals(original_file, downloaded_file)
         assert equal_files, "Unexpected file"
 
+    def test_careers(self):
+        # Verify careers redirect to jobs.eu.lever.co
+        about_us = self.main_page.search_by_title('About Us')
+        about_us.click()
+        careers = self.main_page.get_element_by_attribute_value('title', 'Careers')
+        careers.click()
+        self.main_page.wait_title('Careers')
+        explore_jobs = self.main_page.search_by_link_text('Explore all jobs')
+        explore_jobs.click()
+        self.main_page.wait_title('Voicemod')
+        assert self.main_page.driver.current_url == 'https://jobs.eu.lever.co/voicemod', "Unexpected jobs url"
+
     def tearDown(self):
         self.driver.close()
 

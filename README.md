@@ -42,3 +42,4 @@ export sonarToken="your-token"
 ./scripts/run-sonar-scanner.sh
 ```
 ![sonar](images/sonar.png "SonarQube")
+

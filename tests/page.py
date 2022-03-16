@@ -37,6 +37,14 @@ class MainPage(BasePage):
         )
         return element
 
+    def search_by_link_text(self, text):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.element_to_be_clickable(
+                (By.LINK_TEXT, text)
+            )
+        )
+        return element
+
     def search_by_class(self, class_name):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.element_to_be_clickable(
@@ -45,7 +53,7 @@ class MainPage(BasePage):
         )
         return element
 
-    def is_visible_by_class(self, class_name):
+    def is_not_visible_by_class(self, class_name):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.invisibility_of_element(
                 (By.CLASS_NAME, class_name)
@@ -79,6 +87,14 @@ class MainPage(BasePage):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.element_to_be_clickable(
                 (By.XPATH, f"//*[@{attribute}='{value}']")
+            )
+        )
+        return element
+
+    def get_element_by_class(self, class_name):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.element_to_be_clickable(
+                (By.CLASS_NAME, class_name)
             )
         )
         return element
@@ -136,7 +152,7 @@ class MainPage(BasePage):
     def accept_cookies(self):
         accept_all_cookies_button = self.get_element_by_attribute_value('aria-label', 'Accept all cookies')
         accept_all_cookies_button.click()
-        self.is_visible_by_class('cookie-consent')
+        self.is_not_visible_by_class('cookie-consent')
 
     def wait_title(self, text):
         WebDriverWait(self.driver, 10).until(
