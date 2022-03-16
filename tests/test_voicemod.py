@@ -42,34 +42,6 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
         assert file_exists, "Error downloading Voicemod installer"
 
-    # def test_soundboard(self):
-    #     # Search Soundboard link
-    #     soundboard_link = self.main_page.search_by_title('Soundboard')
-    #     soundboard_link.click()
-    #     # Delete previous files
-    #     self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-    #     # Click to download button
-    #     download_button = self.main_page.search_by_class('download-button')
-    #     download_button.click()
-    #     self.main_page.discord_login()
-    #     self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
-    #     file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-    #     assert file_exists, "Error downloading Soundboard installer"
-    #
-    # def test_voicelab(self):
-    #     # Search soundboard link
-    #     soundboard_link = self.main_page.search_by_title('Voicelab')
-    #     soundboard_link.click()
-    #     # Delete previous files
-    #     self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-    #     # Click to download button
-    #     download_button = self.main_page.search_by_class('download-button')
-    #     download_button.click()
-    #     self.main_page.discord_login()
-    #     self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
-    #     file_exists = self.file_utils.file_exists(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
-    #     assert file_exists, "Error downloading Voicelab installer"
-
     def test_free_sounds(self):
         # Delete previous files
         self.file_utils.delete_files(config['system']['downloads_folder'], 'el-test-ha-fallado-By-Tuna.mp3')
@@ -122,8 +94,23 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         self.main_page.wait_title('Voicemod')
         assert self.main_page.driver.current_url == 'https://jobs.eu.lever.co/voicemod', "Unexpected jobs url"
 
-    def tearDown(self):
+    def test_faq(self):
+        # Search for login faqs, the first should be "Login Issues: LOGIN ERROR"
+        faq = self.main_page.search_by_title('FAQ')
+        faq.click()
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        search_input = self.main_page.get_element_by_id('query')
+        search_input.send_keys('Login')
+        search_input.send_keys(Keys.RETURN)
+        self.main_page.wait_title('Search results – Voicemod')
+        results_list = self.main_page.get_element_by_class('search-results-list')
+        results = results_list.find_elements(By.TAG_NAME, 'li')
+        first_title = results[0].find_element(By.CLASS_NAME, 'search-result-title')
+        assert first_title.text == 'Login Issues: LOGIN ERROR', 'Unexpected first result text'
         self.driver.close()
+
+    def tearDown(self):
+        self.driver.quit()
 
 
 if __name__ == "__main__":
