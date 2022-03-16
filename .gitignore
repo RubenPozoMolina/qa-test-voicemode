@@ -153,3 +153,5 @@ cython_debug/
 
 # Ignore config file
 config/config.ini
+
+.scannerwork
