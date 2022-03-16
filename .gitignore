@@ -154,4 +154,9 @@ cython_debug/
 # Ignore config file
 config/config.ini
 
+<<<<<<< HEAD
 .scannerwork
+=======
+# Ignore test results
+/TEST*.xml
+>>>>>>> development

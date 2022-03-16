@@ -24,7 +24,7 @@ pip install -r requirements.txt
 Create config/config.ini file based on config.template.ini file with your parameters.
 
 ```bash
-python tests/test_voicemod.py
+python -m unittest discover
 ```
 
 ## Lint the project with SonarQube
@@ -36,9 +36,17 @@ python tests/test_voicemod.py
 * Got to http://localhost:9000
 * User/Password admin/admin and change your password
 * http://localhost:9000/account/security/ and create a token
+
+Run test to get code coverage
+```bash
+coverage run --source=./src -m xmlrunner discover
+coverage report
+coverage xml
+```
  
 ```bash
 export sonarToken="your-token"
 ./scripts/run-sonar-scanner.sh
 ```
-![sonar](img/sonar.png "SonarQube")
+![sonar](images/sonar.png "SonarQube")
+

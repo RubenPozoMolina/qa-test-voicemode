@@ -3,7 +3,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-from config import config
+from src.config import config
 
 
 class BasePage(object):
@@ -29,15 +29,23 @@ class MainPage(BasePage):
         )
         return element
 
-    def search_by_class(self, class_name):
+    def search_by_text(self, text):
         element = WebDriverWait(self.driver, 10).until(
-            expected_conditions.element_to_be_clickable(
-                (By.CLASS_NAME, class_name)
+            expected_conditions.element_located_to_be_selected(
+                (By.XPATH, f"//*[contains(text(), '{text}')]")
             )
         )
         return element
 
-    def is_visible_by_class(self, class_name):
+    def search_by_link_text(self, text):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.element_to_be_clickable(
+                (By.LINK_TEXT, text)
+            )
+        )
+        return element
+
+    def is_not_visible_by_class(self, class_name):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.invisibility_of_element(
                 (By.CLASS_NAME, class_name)
@@ -53,6 +61,28 @@ class MainPage(BasePage):
         )
         return element
 
+    def get_element_visible_by_id(self, identifier):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.visibility_of_element_located(
+                (By.ID, identifier)
+            )
+        )
+        return element
+
+    def is_invisible_by_id(self, identifier):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.invisibility_of_element_located(
+                (By.ID, identifier)
+            )
+        )
+
+    def is_invisible_by_class(self, identifier):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.invisibility_of_element_located(
+                (By.CLASS_NAME, identifier)
+            )
+        )
+
     def get_element_by_attribute_value(self, attribute, value):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.element_to_be_clickable(
@@ -60,6 +90,19 @@ class MainPage(BasePage):
             )
         )
         return element
+
+    def get_element_by_class(self, class_name):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.element_to_be_clickable(
+                (By.CLASS_NAME, class_name)
+            )
+        )
+        return element
+
+    @staticmethod
+    def print_html(element):
+        html = element.get_attribute('innerHTML')
+        print(html)
 
     @staticmethod
     def download_wait(directory, timeout, number_of_files=None):
@@ -95,4 +138,23 @@ class MainPage(BasePage):
         authorize_button = authorize_div.find_element(By.XPATH, '..')
         authorize_button.click()
 
+    @staticmethod
+    def search_card_button(card, button_type):
+        element = None
+        buttons = card.find_elements(By.TAG_NAME, 'button')
+        for button in buttons:
+            aria_label = button.get_attribute("aria-label")
+            if aria_label == button_type:
+                element = button
+                break
+        return element
 
+    def accept_cookies(self):
+        accept_all_cookies_button = self.get_element_by_attribute_value('aria-label', 'Accept all cookies')
+        accept_all_cookies_button.click()
+        self.is_not_visible_by_class('cookie-consent')
+
+    def wait_title(self, text):
+        WebDriverWait(self.driver, 10).until(
+            expected_conditions.title_is(text)
+        )
