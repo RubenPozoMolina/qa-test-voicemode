@@ -41,4 +41,4 @@ python tests/test_voicemod.py
 export sonarToken="your-token"
 ./scripts/run-sonar-scanner.sh
 ```
-![sonar](img/sonar.png "SonarQube")
+![sonar](images/sonar.png "SonarQube")
