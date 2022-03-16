@@ -69,6 +69,14 @@ class MainPage(BasePage):
         )
         return element
 
+    def get_element_visible_by_id(self, identifier):
+        element = WebDriverWait(self.driver, 10).until(
+            expected_conditions.visibility_of_element_located(
+                (By.ID, identifier)
+            )
+        )
+        return element
+
     def is_invisible_by_id(self, identifier):
         WebDriverWait(self.driver, 10).until(
             expected_conditions.invisibility_of_element_located(

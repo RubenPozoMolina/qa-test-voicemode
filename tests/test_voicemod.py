@@ -98,7 +98,9 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         # Search for login faqs, the first should be "Login Issues: LOGIN ERROR"
         faq = self.main_page.search_by_title('FAQ')
         faq.click()
+        # Select second tab
         self.driver.switch_to.window(self.driver.window_handles[1])
+        # Search for Login word
         search_input = self.main_page.get_element_by_id('query')
         search_input.send_keys('Login')
         search_input.send_keys(Keys.RETURN)
@@ -107,7 +109,22 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         results = results_list.find_elements(By.TAG_NAME, 'li')
         first_title = results[0].find_element(By.CLASS_NAME, 'search-result-title')
         assert first_title.text == 'Login Issues: LOGIN ERROR', 'Unexpected first result text'
+        # Close second tab
         self.driver.close()
+
+    def test_my_account(self):
+        # Verify user email is right
+        my_account = self.main_page.search_by_title('My Account')
+        my_account.click()
+        # Select second tab
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        self.main_page.discord_login()
+        self.main_page.wait_title('Voicemod User Account')
+        email_view = self.main_page.get_element_by_attribute_value('data-testid', 'view')
+        email_view.click()
+        email_input = self.main_page.get_element_visible_by_id('test')
+        email = email_input.get_attribute("value")
+        assert email == config['credentials']['email'], "Email unexpected"
 
     def tearDown(self):
         self.driver.quit()
