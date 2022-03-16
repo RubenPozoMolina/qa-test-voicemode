@@ -3,7 +3,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-from config import config
+from src.config import config
 
 
 class BasePage(object):
@@ -41,14 +41,6 @@ class MainPage(BasePage):
         element = WebDriverWait(self.driver, 10).until(
             expected_conditions.element_to_be_clickable(
                 (By.LINK_TEXT, text)
-            )
-        )
-        return element
-
-    def search_by_class(self, class_name):
-        element = WebDriverWait(self.driver, 10).until(
-            expected_conditions.element_to_be_clickable(
-                (By.CLASS_NAME, class_name)
             )
         )
         return element

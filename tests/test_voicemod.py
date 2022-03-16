@@ -6,9 +6,9 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
-import page
-from config import config
-from file_utils import FileUtils
+from src import page
+from src.config import config
+from src.file_utils import FileUtils
 
 
 class TestFreeVoiceChangerSoftware(unittest.TestCase):
@@ -35,7 +35,7 @@ class TestFreeVoiceChangerSoftware(unittest.TestCase):
         # Delete previous files
         self.file_utils.delete_files(config['system']['downloads_folder'], 'VoicemodSetup*.exe')
         # Click to download button
-        download_button = self.main_page.search_by_class('download-button')
+        download_button = self.main_page.get_element_by_class('download-button')
         download_button.click()
         self.main_page.discord_login()
         self.main_page.download_wait(config['system']['downloads_folder'], 30, 1)
